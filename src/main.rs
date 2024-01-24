@@ -1,5 +1,7 @@
-#![no_main]
+//! main.rs
+
 #![no_std]
+#![no_main]
 
 use panic_rtt_target as _;
 use rtt_target::{rprintln, rtt_init_print};
@@ -20,17 +22,20 @@ fn main() -> ! {
     let mut _board = Board::take().unwrap();
 	let mut timer = Timer::new(_board.TIMER0);
 	
-	let mut isOff = false;
+	let mut is_on = false;
 
-    _board.display_pins.col1.set_high().unwrap();
+	rprintln!("Starting...");
+    _board.display_pins.col3.set_low().unwrap();
 
     loop {
-		timer.delay_ms(300u16);
-		isOff = if isOff {
-			_board.display_pins.col1.set_high().unwrap();
-			true
+		timer.delay_ms(500u16);
+		is_on = if is_on {
+			_board.display_pins.row3.set_low().unwrap();
+			rprintln!("low");
+			false
 		} else {
-			_board.display_pins.col1.set_low().unwrap();
+			_board.display_pins.row3.set_high().unwrap();
+			rprintln!("high");
 			true
 		}
     }
